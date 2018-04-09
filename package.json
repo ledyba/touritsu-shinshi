@@ -24,7 +24,7 @@
     "write-file-webpack-plugin": "^4.2.0"
   },
   "dependencies": {
-    "p2": "^0.7.1",
+    "p2": "schteppe/p2.js",
     "pixi.js": "^4.7.1"
   }
 }

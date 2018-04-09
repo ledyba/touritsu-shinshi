@@ -1,6 +1,8 @@
 import * as PIXI from 'pixi.js';
 import p2 from 'p2';
 
+const SCALE = 100.0;
+
 export default class World {
   constructor() {
     /**
@@ -38,13 +40,17 @@ export default class World {
     
     /** @private */
     this.groundBody_ = new p2.Body();
-    this.groundBody_.addShape(new p2.Plane());
+    /** @private */
+    this.groundShape_ = new p2.Plane({
+      material: new p2.Material()
+    });
+    this.groundBody_.addShape(this.groundShape_);
     this.world.addBody(this.groundBody_);
 
     /* ******** ball ******** */
     /** @private */
     this.ballBody_ = new p2.Body({
-      position: [this.renderer.width/2/100, 4],
+      position: [this.renderer.width/2/SCALE, 4],
       mass: 1 // Setting mass to 0 makes the body static
     });
     /** @private */
@@ -57,7 +63,7 @@ export default class World {
     this.ballEntity_ = (() => {
       const g = new PIXI.Graphics();
       g.beginFill(0x22222, 1);
-      g.drawCircle(50, 50, 50);
+      g.drawCircle(0.5 * SCALE, 0.5 * SCALE, 0.5 * SCALE);
       const rt = PIXI.RenderTexture.create(g.width, g.height);
       this.renderer.render(g, rt);
       return new PIXI.Sprite(rt);
@@ -75,7 +81,7 @@ export default class World {
     });
     /** @private */
     this.poleBody_ = new p2.Body({
-      position: [this.renderer.width/2/100, 0.5 + poleHeight/2],
+      position: [this.renderer.width/2/SCALE, 0.5 + poleHeight/2],
       mass: 1 // Setting mass to 0 makes the body static
     });
     this.poleBody_.addShape(this.poleShape_);
@@ -83,7 +89,7 @@ export default class World {
     this.poleEntity_ = (() => {
       const g = new PIXI.Graphics();
       g.beginFill(0x527cbf, 1);
-      g.drawRect(0,0,20,poleHeight * 100);
+      g.drawRect(0,0,0.2 * SCALE,poleHeight * SCALE);
       const rt = PIXI.RenderTexture.create(g.width, g.height);
       this.renderer.render(g, rt);
       return new PIXI.Sprite(rt);
@@ -95,19 +101,20 @@ export default class World {
 
     /** @private */
     this.wheelBody_ = new p2.Body({
-      position: [this.renderer.width/2/100, 0.5],
+      position: [this.renderer.width/2/SCALE, 0.5],
       mass: 1 // Setting mass to 0 makes the body static
     });
     /** @private */
     this.wheelShape_ = new p2.Circle({
       radius: 0.5,
+      material: new p2.Material()
     });
     this.wheelBody_.addShape(this.wheelShape_);
     this.world.addBody(this.wheelBody_);
     this.wheelEntity_ = (() => {
       const g = new PIXI.Graphics();
       g.beginFill(0x22222, 1);
-      g.drawCircle(50, 50, 50);
+      g.drawCircle(0.5 * SCALE, 0.5 * SCALE, 0.5 * SCALE);
       const rt = PIXI.RenderTexture.create(g.width, g.height);
       this.renderer.render(g, rt);
       return new PIXI.Sprite(rt);
@@ -120,6 +127,7 @@ export default class World {
     this.stage.addChild(this.wheelEntity_);
     this.stage.addChild(this.poleEntity_);
 
+    /** @private */
     this.ballJoint_ = new p2.RevoluteConstraint(this.ballBody_, this.poleBody_, {
       localPivotA: [0, 0],
       localPivotB: [0, poleHeight/2],
@@ -127,15 +135,26 @@ export default class World {
     });
     this.world.addConstraint(this.ballJoint_);
 
+    /** @private */
     this.wheelJoint_ = new p2.RevoluteConstraint(this.wheelBody_, this.poleBody_, {
       localPivotA: [0, 0],
       localPivotB: [0, -poleHeight/2],
-      collideConnected: false
+      collideConnected: false,
+      maxForce: 40,
     });
     this.world.addConstraint(this.wheelJoint_);
     this.wheelJoint_.motorEnabled = true;
-    this.wheelJoint_.motorEquation.maxForce = 40;
-    this.wheelJoint_.motorEquation.minForce = -40;
+    this.wheelJoint_.motorSpeed = 10;
+
+    /** @private */
+    this.frictionContactMaterial_ = new p2.ContactMaterial(
+      this.wheelShape_.material,
+      this.groundShape_.material,
+      {
+        friction: 100
+      }
+    );
+    this.world.addContactMaterial(this.frictionContactMaterial_);
 
     this.runner_ = this.run.bind(this);
   }
@@ -145,12 +164,14 @@ export default class World {
    */
   worldToScreen(pos) {
     const [posX, posY] = pos;
-    return [posX * 100.0, this.renderer.height - (posY * 100)];
+    return [posX * SCALE, this.renderer.height - (posY * SCALE)];
   }
   run(time) {
     window.requestAnimationFrame(this.runner_);
     // Do Physics
-    p2.vec2.add(this.ballBody_.force, this.ballBody_.force, p2.vec2.fromValues(Math.random()-0.5, Math.random()-0.5));
+    p2.vec2.add(this.ballBody_.force, this.ballBody_.force, p2.vec2.fromValues((Math.random()-0.5)*10, (Math.random()-0.5)*10));
+
+    this.wheelJoint_.motorSpeed = this.poleBody_.angle * 100;
 
     const deltaTime = this.lastTime ? (time - lastTime) / 1000 : 0;
     this.world.step(1.0/60, deltaTime, 10);
