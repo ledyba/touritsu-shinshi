@@ -66,6 +66,8 @@ export default class World {
       const g = new PIXI.Graphics();
       g.beginFill(0x22222, 1);
       g.drawCircle(0.5 * SCALE, 0.5 * SCALE, 0.5 * SCALE);
+      g.lineStyle(2,0xffffff).moveTo(0.5 * SCALE, 0).lineTo(0.5 * SCALE, 1.0*SCALE);
+      g.lineStyle(2,0xffffff).moveTo(0, 0.5 * SCALE).lineTo(1.0*SCALE, 0.5 * SCALE);
       const rt = PIXI.RenderTexture.create(g.width, g.height);
       this.renderer.render(g, rt);
       return new PIXI.Sprite(rt);
@@ -121,6 +123,8 @@ export default class World {
       const g = new PIXI.Graphics();
       g.beginFill(0x22222, 1);
       g.drawCircle(0.5 * SCALE, 0.5 * SCALE, 0.5 * SCALE);
+      g.lineStyle(2,0xffffff).moveTo(0.5 * SCALE, 0).lineTo(0.5 * SCALE, 1.0*SCALE);
+      g.lineStyle(2,0xffffff).moveTo(0, 0.5 * SCALE).lineTo(1.0*SCALE, 0.5 * SCALE);
       const rt = PIXI.RenderTexture.create(g.width, g.height);
       this.renderer.render(g, rt);
       return new PIXI.Sprite(rt);
@@ -190,6 +194,7 @@ export default class World {
     [posX, posY] = this.worldToScreen(this.ballBody.position);
     this.ballEntity.position.x = posX;
     this.ballEntity.position.y = posY;
+    this.ballEntity.rotation = -this.ballBody.angle;
 
     [posX, posY] = this.worldToScreen(this.poleBody.position);
     this.poleEntity.position.x = posX;
@@ -199,6 +204,7 @@ export default class World {
     [posX, posY] = this.worldToScreen(this.wheelBody.position);
     this.wheelEntity.position.x = posX;
     this.wheelEntity.position.y = posY;
+    this.wheelEntity.rotation = -this.wheelBody.angle;
 
     // render
     this.renderer.render(this.stage);
