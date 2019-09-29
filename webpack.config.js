@@ -24,7 +24,7 @@ module.exports = {
             presets: [
               // {modules: false}にしないと import 文が Babel によって CommonJS に変換され、
               // webpack の Tree Shaking 機能が使えない
-                ['env', {'modules': false}]
+                ['@babel/preset-env', {'modules': false}]
             ]
           }
         }]

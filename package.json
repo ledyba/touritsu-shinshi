@@ -4,19 +4,19 @@
   "description": "Touritsu Shinshi Simulator",
   "main": "src/main.js",
   "scripts": {
-    "start": "webpack-dev-server",
+    "watch": "webpack-dev-server",
     "build": "webpack",
     "test": "NODE_ENV=test mocha --require babel-register --recursive $(find . -type f -name '*.spec.js' -not -path './node_modules/*')",
-    "update": "ncu -u -a"
+    "update": "ncu -u"
   },
   "author": "PSI",
   "license": "BSD-2-Clause",
   "devDependencies": {
     "@types/pixi.js": "^4.8.9",
-    "babel-core": "^6.26.3",
+    "@babel/core": "^7.6.2",
+    "@babel/preset-env": "^7.6.2",
+    "@babel/register": "^7.6.2",
     "babel-loader": "^8.0.6",
-    "babel-preset-env": "^1.7.0",
-    "babel-register": "^6.26.0",
     "chai": "^4.2.0",
     "mocha": "^6.2.1",
     "npm-check-updates": "^3.1.23",
