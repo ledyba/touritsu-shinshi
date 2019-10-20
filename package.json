@@ -4,7 +4,7 @@
   "description": "Touritsu Shinshi Simulator",
   "main": "src/main.js",
   "scripts": {
-    "watch": "webpack-dev-server",
+    "start": "webpack-dev-server",
     "build": "webpack",
     "test": "NODE_ENV=test mocha --require babel-register --recursive $(find . -type f -name '*.spec.js' -not -path './node_modules/*')",
     "update": "ncu -u"
@@ -18,9 +18,9 @@
     "@babel/register": "^7.6.2",
     "babel-loader": "^8.0.6",
     "chai": "^4.2.0",
-    "mocha": "^6.2.1",
+    "mocha": "^6.2.2",
     "npm-check-updates": "^3.1.24",
-    "webpack": "^4.41.1",
+    "webpack": "^4.41.2",
     "webpack-cli": "^3.3.9",
     "webpack-dev-server": "^3.8.2",
     "write-file-webpack-plugin": "^4.5.1"

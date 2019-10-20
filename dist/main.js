@@ -1619,7 +1619,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _Wor
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("__webpack_require__(/*! /home/kaede/umi/src/github.com/ledyba/touritsu-shinshi/node_modules/webpack-dev-server/client/index.js?http://localhost:8080 */\"./node_modules/webpack-dev-server/client/index.js?http://localhost:8080\");\nmodule.exports = __webpack_require__(/*! ./src/main.js */\"./src/main.js\");\n\n\n//# sourceURL=webpack:///multi_(webpack)-dev-server/client?");
+eval("__webpack_require__(/*! /mnt/c/Users/kaede/umi/src/github.com/ledyba/touritsu-shinshi/node_modules/webpack-dev-server/client/index.js?http://localhost:8080 */\"./node_modules/webpack-dev-server/client/index.js?http://localhost:8080\");\nmodule.exports = __webpack_require__(/*! ./src/main.js */\"./src/main.js\");\n\n\n//# sourceURL=webpack:///multi_(webpack)-dev-server/client?");
 
 /***/ })
 
