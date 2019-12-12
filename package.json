@@ -7,26 +7,25 @@
     "start": "webpack-dev-server",
     "build": "webpack",
     "test": "NODE_ENV=test mocha --require babel-register --recursive $(find . -type f -name '*.spec.js' -not -path './node_modules/*')",
-    "update": "ncu -u"
+    "update": "npm-check-updates -u"
   },
   "author": "PSI",
   "license": "BSD-2-Clause",
   "devDependencies": {
-    "@types/pixi.js": "^4.8.9",
-    "@babel/core": "^7.6.4",
-    "@babel/preset-env": "^7.6.3",
-    "@babel/register": "^7.6.2",
+    "@babel/core": "^7.7.5",
+    "@babel/preset-env": "^7.7.6",
+    "@babel/register": "^7.7.4",
     "babel-loader": "^8.0.6",
     "chai": "^4.2.0",
     "mocha": "^6.2.2",
-    "npm-check-updates": "^3.1.24",
+    "npm-check-updates": "^4.0.1",
     "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.9",
-    "webpack-dev-server": "^3.8.2",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.9.0",
     "write-file-webpack-plugin": "^4.5.1"
   },
   "dependencies": {
     "p2": "schteppe/p2.js",
-    "pixi.js": "^5.1.5"
+    "pixi.js": "^5.2.0"
   }
 }

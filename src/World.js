@@ -7,7 +7,7 @@ const SCALE = 100.0;
 export default class World {
   constructor() {
     /**
-     * @type {PIXI.WebGLRenderer}
+     * @type {PIXI.Renderer}
      * @public
      */
     this.renderer = PIXI.autoDetectRenderer(1024, 576, {antialias:true});
