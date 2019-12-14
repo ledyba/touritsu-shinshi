@@ -10,7 +10,11 @@ export default class World {
      * @type {PIXI.Renderer}
      * @public
      */
-    this.renderer = PIXI.autoDetectRenderer(1024, 576, {antialias:true});
+    this.renderer = PIXI.autoDetectRenderer({
+      width: 1280,
+      height: 720,
+      antialias:true
+    });
     this.renderer.backgroundColor = 0xffffffff;
 
     /**
