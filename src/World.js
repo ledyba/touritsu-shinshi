@@ -66,8 +66,9 @@ export default class World {
       const g = new PIXI.Graphics();
       g.beginFill(0x22222, 1);
       g.drawCircle(0.5 * SCALE, 0.5 * SCALE, 0.5 * SCALE);
-      g.lineStyle(2,0xffffff).moveTo(0.5 * SCALE, 0).lineTo(0.5 * SCALE, 1.0*SCALE);
-      g.lineStyle(2,0xffffff).moveTo(0, 0.5 * SCALE).lineTo(1.0*SCALE, 0.5 * SCALE);
+      g.beginFill(0xffffff, 1.0);
+      g.lineStyle(2).moveTo(0.5 * SCALE, 0).lineTo(0.5 * SCALE, 1.0*SCALE);
+      g.lineStyle(2).moveTo(0, 0.5 * SCALE).lineTo(1.0*SCALE, 0.5 * SCALE);
       const rt = PIXI.RenderTexture.create(g.width, g.height);
       this.renderer.render(g, rt);
       return new PIXI.Sprite(rt);
@@ -80,7 +81,7 @@ export default class World {
     const poleHeight = (4-0.5);
     /** @public */
     this.poleShape = new p2.Box({
-      width: 0.2,
+      width: 0.3,
       height: poleHeight,
     });
     /** @public */
@@ -94,7 +95,7 @@ export default class World {
     this.poleEntity = (() => {
       const g = new PIXI.Graphics();
       g.beginFill(0x527cbf, 1);
-      g.drawRect(0,0,0.2 * SCALE,poleHeight * SCALE);
+      g.drawRect(0,0,0.3 * SCALE,poleHeight * SCALE);
       const rt = PIXI.RenderTexture.create(g.width, g.height);
       this.renderer.render(g, rt);
       return new PIXI.Sprite(rt);
@@ -121,10 +122,11 @@ export default class World {
     /** @public */
     this.wheelEntity = (() => {
       const g = new PIXI.Graphics();
-      g.beginFill(0x22222, 1);
+      g.beginFill(0x22222, 1.0);
       g.drawCircle(0.5 * SCALE, 0.5 * SCALE, 0.5 * SCALE);
-      g.lineStyle(2,0xffffff).moveTo(0.5 * SCALE, 0).lineTo(0.5 * SCALE, 1.0*SCALE);
-      g.lineStyle(2,0xffffff).moveTo(0, 0.5 * SCALE).lineTo(1.0*SCALE, 0.5 * SCALE);
+      g.beginFill(0xffffff, 1.0);
+      g.lineStyle(2).moveTo(0.5 * SCALE, 0).lineTo(0.5 * SCALE, 1.0*SCALE);
+      g.lineStyle(2).moveTo(0, 0.5 * SCALE).lineTo(1.0*SCALE, 0.5 * SCALE);
       const rt = PIXI.RenderTexture.create(g.width, g.height);
       this.renderer.render(g, rt);
       return new PIXI.Sprite(rt);
