@@ -7,10 +7,10 @@
     "start": "webpack-dev-server",
     "build": "webpack",
     "test": "NODE_ENV=test mocha --require babel-register --recursive $(find . -type f -name '*.spec.js' -not -path './node_modules/*')",
-    "update": "npm-check-updates -u"
+    "up": "npm-check-updates -u && npm update"
   },
   "author": "PSI",
-  "license": "BSD-2-Clause",
+  "license": "GPL-3.0-or-later",
   "devDependencies": {
     "@babel/core": "^7.9.6",
     "@babel/preset-env": "^7.9.6",
