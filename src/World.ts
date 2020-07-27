@@ -1,37 +1,46 @@
 import * as PIXI from 'pixi.js';
 import p2 from 'p2';
-import { Controller } from './Controller.js';
+import { Controller } from './Controller';
 
 const SCALE = 100.0;
 
 export default class World {
+  public readonly renderer: PIXI.Renderer;
+  private readonly stage: PIXI.Container;
+  private readonly world: p2.World;
+  private parent_: HTMLElement | null = null;
+  private groundBody: p2.Body | null = null;
+  private groundShape: p2.Plane | null = null;
+  private ballBody: p2.Body | null = null;
+  private ballShape: p2.Circle | null = null;
+  private ballEntity: PIXI.Sprite | null = null;
+  private poleShape: p2.Box | null = null;
+  private poleBody: p2.Body | null = null;
+  private poleEntity: PIXI.Sprite | null = null;
+  private wheelBody: p2.Body | null = null;
+  private wheelShape: p2.Circle | null = null;
+  private wheelEntity: PIXI.Sprite | null = null;
+  private ballJoint: p2.RevoluteConstraint | null = null;
+  private wheelJoint: p2.RevoluteConstraint | null = null;
+  private frictionContactMaterial: p2.ContactMaterial | null = null;
+  private readonly runner_: (time: number) => void;
+  lastTime: any;
   constructor() {
-    /**
-     * @type {PIXI.Renderer}
-     * @public
-     */
     this.renderer = PIXI.autoDetectRenderer({
       width: 1280,
       height: 720,
       antialias:true
     });
     this.renderer.backgroundColor = 0xffffffff;
-
-    /**
-     * @type {PIXI.Container}
-     * @private
-     */
     this.stage = new PIXI.Container();
-
     this.world = new p2.World({
       gravity:[0, -9.82]
     });
+
+    this.runner_ = this.run.bind(this);
   }
 
-  /**
-   * @param {HTMLElement} parent 
-   */
-  start(parent) {
+  start(parent: HTMLElement) {
     /** @private */
     this.parent_ = parent;
     this.parent_.appendChild(this.renderer.view);
@@ -46,9 +55,8 @@ export default class World {
     /** @public */
     this.groundBody = new p2.Body();
     /** @public */
-    this.groundShape = new p2.Plane({
-      material: new p2.Material()
-    });
+    this.groundShape = new p2.Plane();
+    this.groundShape.material = new p2.Material(),
     this.groundBody.addShape(this.groundShape);
     this.world.addBody(this.groundBody);
 
@@ -73,7 +81,10 @@ export default class World {
       g.beginFill(0xffffff, 1.0);
       g.lineStyle(2).moveTo(0.5 * SCALE, 0).lineTo(0.5 * SCALE, 1.0*SCALE);
       g.lineStyle(2).moveTo(0, 0.5 * SCALE).lineTo(1.0*SCALE, 0.5 * SCALE);
-      const rt = PIXI.RenderTexture.create(g.width, g.height);
+      const rt = PIXI.RenderTexture.create({
+        width: g.width,
+        height: g.height,
+      });
       this.renderer.render(g, rt);
       return new PIXI.Sprite(rt);
     })();
@@ -100,7 +111,10 @@ export default class World {
       const g = new PIXI.Graphics();
       g.beginFill(0x527cbf, 1);
       g.drawRect(0,0,0.3 * SCALE,poleHeight * SCALE);
-      const rt = PIXI.RenderTexture.create(g.width, g.height);
+      const rt = PIXI.RenderTexture.create({
+        width: g.width,
+        height: g.height,
+      });
       this.renderer.render(g, rt);
       return new PIXI.Sprite(rt);
     })();
@@ -118,8 +132,8 @@ export default class World {
     /** @public */
     this.wheelShape = new p2.Circle({
       radius: 0.5,
-      material: new p2.Material()
     });
+    this.wheelShape.material = new p2.Material();
     this.wheelBody.addShape(this.wheelShape);
     this.world.addBody(this.wheelBody);
 
@@ -131,7 +145,10 @@ export default class World {
       g.beginFill(0xffffff, 1.0);
       g.lineStyle(2).moveTo(0.5 * SCALE, 0).lineTo(0.5 * SCALE, 1.0*SCALE);
       g.lineStyle(2).moveTo(0, 0.5 * SCALE).lineTo(1.0*SCALE, 0.5 * SCALE);
-      const rt = PIXI.RenderTexture.create(g.width, g.height);
+      const rt = PIXI.RenderTexture.create({
+        width: g.width,
+        height: g.height,
+      });
       this.renderer.render(g, rt);
       return new PIXI.Sprite(rt);
     })();
@@ -160,7 +177,7 @@ export default class World {
     });
     this.world.addConstraint(this.wheelJoint);
     this.wheelJoint.motorEnabled = true;
-    this.wheelJoint.motorSpeed = 10;
+    this.wheelJoint.setMotorSpeed(10);
 
     /** @public */
     this.frictionContactMaterial = new p2.ContactMaterial(
@@ -171,46 +188,40 @@ export default class World {
       }
     );
     this.world.addContactMaterial(this.frictionContactMaterial);
-
-    /** @private */
-    this.runner_ = this.run.bind(this);
   }
-  /**
-   * 
-   * @param {number[]} pos 
-   */
-  worldToScreen(pos) {
+
+  worldToScreen(pos: [number, number]) {
     const [posX, posY] = pos;
     return [posX * SCALE, this.renderer.height - (posY * SCALE)];
   }
-  run(time) {
+  run(time: number) {
     window.requestAnimationFrame(this.runner_);
     // Do Physics
-    p2.vec2.add(this.ballBody.force, this.ballBody.force, p2.vec2.fromValues((Math.random()-0.5)*10, (Math.random()-0.5)*10));
+    p2.vec2.add(this.ballBody!.force, this.ballBody!.force, p2.vec2.fromValues((Math.random()-0.5)*10, (Math.random()-0.5)*10));
 
-    this.wheelJoint.motorSpeed = this.poleBody.angle * 100;
+    this.wheelJoint?.setMotorSpeed(this.poleBody!.angle * 100);
 
-    const deltaTime = this.lastTime ? (time - lastTime) / 1000 : 0;
+    const deltaTime = this.lastTime ? (time - this.lastTime) / 1000 : 0;
     this.world.step(1.0/60, deltaTime, 10);
 
     /** @type {number} posX */
     /** @type {number} posY */
     let posX, posY = 0;
     // Render
-    [posX, posY] = this.worldToScreen(this.ballBody.position);
-    this.ballEntity.position.x = posX;
-    this.ballEntity.position.y = posY;
-    this.ballEntity.rotation = -this.ballBody.angle;
+    [posX, posY] = this.worldToScreen(this.ballBody!.position as [number, number]);
+    this.ballEntity!.position.x = posX;
+    this.ballEntity!.position.y = posY;
+    this.ballEntity!.rotation = -this.ballBody!.angle;
 
-    [posX, posY] = this.worldToScreen(this.poleBody.position);
-    this.poleEntity.position.x = posX;
-    this.poleEntity.position.y = posY;
-    this.poleEntity.rotation = -this.poleBody.angle;
+    [posX, posY] = this.worldToScreen(this.poleBody!.position as [number, number]);
+    this.poleEntity!.position.x = posX;
+    this.poleEntity!.position.y = posY;
+    this.poleEntity!.rotation = -this.poleBody!.angle;
 
-    [posX, posY] = this.worldToScreen(this.wheelBody.position);
-    this.wheelEntity.position.x = posX;
-    this.wheelEntity.position.y = posY;
-    this.wheelEntity.rotation = -this.wheelBody.angle;
+    [posX, posY] = this.worldToScreen(this.wheelBody!.position as [number, number]);
+    this.wheelEntity!.position.x = posX;
+    this.wheelEntity!.position.y = posY;
+    this.wheelEntity!.rotation = -this.wheelBody!.angle;
 
     // render
     this.renderer.render(this.stage);
