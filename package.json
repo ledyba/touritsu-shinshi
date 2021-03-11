@@ -13,20 +13,20 @@
   "license": "GPL-3.0-or-later",
   "devDependencies": {
     "@types/write-file-webpack-plugin": "^4.5.0",
-    "babel-loader": "^8.1.0",
-    "chai": "^4.2.0",
-    "mocha": "^8.0.1",
-    "npm-check-updates": "^7.0.2",
-    "ts-loader": "^8.0.1",
-    "ts-node": "^8.10.2",
-    "typescript": "^3.9.7",
-    "webpack": "^4.44.0",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.0",
+    "babel-loader": "^8.2.2",
+    "chai": "^4.3.3",
+    "mocha": "^8.3.1",
+    "npm-check-updates": "^11.2.1",
+    "ts-loader": "^8.0.17",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.3",
+    "webpack": "^5.24.4",
+    "webpack-cli": "^4.5.0",
+    "webpack-dev-server": "^3.11.2",
     "write-file-webpack-plugin": "^4.5.1"
   },
   "dependencies": {
     "p2": "github:schteppe/p2.js",
-    "pixi.js": "^5.3.2"
+    "pixi.js": "^6.0.0"
   }
 }
