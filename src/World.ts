@@ -8,6 +8,7 @@ export default class World {
   public readonly renderer: PIXI.Renderer;
   private readonly stage: PIXI.Container;
   private readonly world: p2.World;
+  private readonly controller: Controller;
   private parent_: HTMLElement | null = null;
   private groundBody: p2.Body | null = null;
   private groundShape: p2.Plane | null = null;
@@ -36,6 +37,7 @@ export default class World {
     this.world = new p2.World({
       gravity:[0, -9.82]
     });
+    this.controller = new Controller();
 
     this.runner_ = this.run.bind(this);
   }
@@ -185,10 +187,12 @@ export default class World {
     // Do Physics
     p2.vec2.add(this.ballBody!.force, this.ballBody!.force, p2.vec2.fromValues((Math.random()-0.5)*10, (Math.random()-0.5)*10));
 
-    this.wheelJoint?.setMotorSpeed(this.poleBody!.angle * 100);
+    //this.wheelJoint?.setMotorSpeed( * 100);
 
     const deltaTime = this.lastTime ? (time - this.lastTime) / 1000 : 0;
+    this.wheelJoint?.setMotorSpeed(this.controller.run(this.poleBody!.angle, deltaTime));
     this.world.step(1.0/60, deltaTime, 10);
+
 
     let posX: number = 0
     let posY: number = 0;
@@ -211,5 +215,6 @@ export default class World {
 
     // render
     this.renderer.render(this.stage);
+    this.lastTime = time;
   }
 }
