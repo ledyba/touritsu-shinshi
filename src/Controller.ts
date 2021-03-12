@@ -16,7 +16,7 @@ export class Controller {
     const diff = (input - this.setPoint);
     this.sum += ((input + this.prev) / 2.0) * delta;
     const p = diff * 100;
-    const i = this.sum * 20;
+    const i = this.sum * 200;
     const d = (diff / delta) * 7;
 
     this.prev = input;
