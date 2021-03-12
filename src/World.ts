@@ -30,7 +30,7 @@ export default class World {
       width: 1280,
       height: 720,
       antialias:true
-    });
+    }) as PIXI.Renderer;
     this.renderer.backgroundColor = 0xffffffff;
     this.stage = new PIXI.Container();
     this.world = new p2.World({
@@ -52,28 +52,23 @@ export default class World {
 
     /* ******** ground ******** */
     
-    /** @public */
     this.groundBody = new p2.Body();
-    /** @public */
     this.groundShape = new p2.Plane();
     this.groundShape.material = new p2.Material(),
     this.groundBody.addShape(this.groundShape);
     this.world.addBody(this.groundBody);
 
     /* ******** ball ******** */
-    /** @public */
     this.ballBody = new p2.Body({
       position: [this.renderer.width/2/SCALE, 4],
       mass: 1 // Setting mass to 0 makes the body static
     });
-    /** @public */
     this.ballShape = new p2.Circle({
       radius: 0.5,
     });
     this.ballBody.addShape(this.ballShape);
     this.world.addBody(this.ballBody);
 
-    /** @public */
     this.ballEntity = (() => {
       const g = new PIXI.Graphics();
       g.beginFill(0x22222, 1);
@@ -94,19 +89,16 @@ export default class World {
     /* ******** pole ******** */
 
     const poleHeight = (4-0.5);
-    /** @public */
     this.poleShape = new p2.Box({
       width: 0.3,
       height: poleHeight,
     });
-    /** @public */
     this.poleBody = new p2.Body({
       position: [this.renderer.width/2/SCALE, 0.5 + poleHeight/2],
       mass: 1 // Setting mass to 0 makes the body static
     });
     this.poleBody.addShape(this.poleShape);
     this.world.addBody(this.poleBody);
-    /** @public */
     this.poleEntity = (() => {
       const g = new PIXI.Graphics();
       g.beginFill(0x527cbf, 1);
@@ -123,13 +115,11 @@ export default class World {
 
     /* ******** wheel ******** */
 
-    /** @public */
     this.wheelBody = new p2.Body({
       position: [this.renderer.width/2/SCALE, 0.5],
       mass: 1 // Setting mass to 0 makes the body static
     });
 
-    /** @public */
     this.wheelShape = new p2.Circle({
       radius: 0.5,
     });
@@ -137,7 +127,6 @@ export default class World {
     this.wheelBody.addShape(this.wheelShape);
     this.world.addBody(this.wheelBody);
 
-    /** @public */
     this.wheelEntity = (() => {
       const g = new PIXI.Graphics();
       g.beginFill(0x22222, 1.0);
@@ -160,7 +149,6 @@ export default class World {
     this.stage.addChild(this.wheelEntity);
     this.stage.addChild(this.poleEntity);
 
-    /** @public */
     this.ballJoint = new p2.RevoluteConstraint(this.ballBody, this.poleBody, {
       localPivotA: [0, 0],
       localPivotB: [0, poleHeight/2],
@@ -168,7 +156,6 @@ export default class World {
     });
     this.world.addConstraint(this.ballJoint);
 
-    /** @public */
     this.wheelJoint = new p2.RevoluteConstraint(this.wheelBody, this.poleBody, {
       localPivotA: [0, 0],
       localPivotB: [0, -poleHeight/2],
@@ -179,7 +166,6 @@ export default class World {
     this.wheelJoint.motorEnabled = true;
     this.wheelJoint.setMotorSpeed(10);
 
-    /** @public */
     this.frictionContactMaterial = new p2.ContactMaterial(
       this.wheelShape.material,
       this.groundShape.material,
@@ -204,9 +190,9 @@ export default class World {
     const deltaTime = this.lastTime ? (time - this.lastTime) / 1000 : 0;
     this.world.step(1.0/60, deltaTime, 10);
 
-    /** @type {number} posX */
-    /** @type {number} posY */
-    let posX, posY = 0;
+    let posX: number = 0
+    let posY: number = 0;
+
     // Render
     [posX, posY] = this.worldToScreen(this.ballBody!.position as [number, number]);
     this.ballEntity!.position.x = posX;
