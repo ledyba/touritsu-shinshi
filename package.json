@@ -4,7 +4,7 @@
   "description": "Touritsu Shinshi Simulator",
   "main": "src/main.js",
   "scripts": {
-    "start": "webpack-dev-server",
+    "start": "webpack-cli serve --mode development",
     "build": "webpack",
     "test": "NODE_ENV=test mocha --require babel-register --recursive $(find . -type f -name '*.spec.js' -not -path './node_modules/*')",
     "up": "npm-check-updates -u && npm install && npm audit fix"
@@ -12,7 +12,7 @@
   "author": "PSI",
   "license": "GPL-3.0-or-later",
   "devDependencies": {
-    "@types/write-file-webpack-plugin": "^4.5.0",
+    "@webpack-cli/serve": "^1.3.0",
     "babel-loader": "^8.2.2",
     "chai": "^4.3.3",
     "mocha": "^8.3.1",
@@ -22,8 +22,7 @@
     "typescript": "^4.2.3",
     "webpack": "^5.24.4",
     "webpack-cli": "^4.5.0",
-    "webpack-dev-server": "^3.11.2",
-    "write-file-webpack-plugin": "^4.5.1"
+    "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
     "p2": "github:schteppe/p2.js",

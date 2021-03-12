@@ -1,5 +1,3 @@
-import WriteFilePlugin from 'write-file-webpack-plugin';
-
 const conf = {
   context: __dirname,
   entry: {
@@ -11,9 +9,6 @@ const conf = {
     filename: '[name].js',
     publicPath: '/dist/'
   },
-  plugins: [
-    new WriteFilePlugin(),
-  ],
   module: {
     rules: [{
       test: /\.ts$/,
