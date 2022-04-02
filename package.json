@@ -10,7 +10,7 @@
     "up": "npm-check-updates -u && npm install && npm audit fix"
   },
   "author": "PSI",
-  "license": "GPL-3.0-or-later",
+  "license": "AGPL-3.0-or-later",
   "devDependencies": {
     "@webpack-cli/serve": "^1.3.0",
     "babel-loader": "^8.2.2",
